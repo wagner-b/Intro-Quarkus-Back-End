@@ -1,11 +1,13 @@
 package tech.ada.model;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
-import jakarta.inject.Inject;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.util.Collections;
 import java.util.List;
@@ -15,11 +17,13 @@ import java.util.Objects;
 @Entity
 @Table(name = "courses")
 public class Course extends PanacheEntity {
+    @NotNull(message = "Name must not be null")
+    @NotBlank(message = "Name must not be blank")
+    @Size(min = 3, message = "Name must have at least 3 characters")
     private String name;
 
-    @Inject
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Lesson> lessons;
+    private final List<Lesson> lessons = new ArrayList<>();
 
     protected Course() {}
 
@@ -40,7 +44,7 @@ public class Course extends PanacheEntity {
     }
 
     public void changeName(String name) {
-        this.name = Objects.requireNonNull(name, "name must not be null");
+        this.name = name;
     }
 
     public void addLessons(Lesson lesson) {
