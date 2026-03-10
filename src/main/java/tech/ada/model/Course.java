@@ -45,7 +45,7 @@ public class Course extends PanacheEntity {
         this.name = name;
     }
 
-    public void addLessons(Lesson lesson) {
+    public void createLesson(Lesson lesson) {
         Lesson validatedLesson = Objects.requireNonNull(lesson,
                 "lesson must not be null");
         this.lessons.add(validatedLesson);
