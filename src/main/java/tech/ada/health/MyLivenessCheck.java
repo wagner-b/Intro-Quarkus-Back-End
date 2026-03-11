@@ -1,4 +1,4 @@
-package tech.ada;
+package tech.ada.health;
 
 import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.HealthCheckResponse;
