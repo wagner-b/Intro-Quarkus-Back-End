@@ -1,6 +1,6 @@
 # Project Introduction to Quarkus (Dev Java Back-End)
 ### Course by Ada Tech
-Simple Rest API to manage Courses and Lessons.
+Simple Rest API (Quarkus + Maven) to manage Courses and Lessons.
 <br>
 Command used to initialize Quarkus with the dependencies (extensions):
 
