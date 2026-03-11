@@ -5,7 +5,6 @@ import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import tech.ada.dto.CourseResponseDTO;
 import tech.ada.dto.CreateLessonRequestDTO;
 import tech.ada.dto.LessonResponseDTO;
 import tech.ada.model.Lesson;
@@ -27,9 +26,9 @@ public class LessonResource {
             @PathParam("courseId") Long courseId
     ) {
         List<Lesson> lessons = service.getLessonsByCourseId(courseId);
-        List<CourseResponseDTO> payload = lessons.stream()
+        List<LessonResponseDTO> payload = lessons.stream()
                 .map((Lesson l) ->
-                        new CourseResponseDTO(l.getId(), l.getName()))
+                        new LessonResponseDTO(l.getId(), l.getName()))
                 .toList();
         return Response.ok(payload).build();
     }
