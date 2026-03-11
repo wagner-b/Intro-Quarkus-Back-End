@@ -30,7 +30,7 @@ public class LessonResource {
                 .map((Lesson l) ->
                         new CourseResponseDTO(l.getId(), l.getName()))
                 .toList();
-        return Response.ok().build();
+        return Response.ok(payload).build();
     }
 
     @POST
