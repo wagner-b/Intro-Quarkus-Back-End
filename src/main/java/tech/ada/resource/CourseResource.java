@@ -1,12 +1,10 @@
 package tech.ada.resource;
 
-import jakarta.annotation.PostConstruct;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import tech.ada.dto.CourseRequestDTO;
 import tech.ada.dto.CourseResponseDTO;
@@ -22,6 +20,7 @@ public class CourseResource {
     CourseService service;
 
     @GET
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getCourses() {
         List<Course> courses = service.getCourses();
 
@@ -34,6 +33,8 @@ public class CourseResource {
 
     @POST
     @Transactional
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response createCourse(@Valid CourseRequestDTO dto) {
         Course course = service.createCourse(dto);
 
