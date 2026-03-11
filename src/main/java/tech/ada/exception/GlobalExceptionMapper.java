@@ -2,6 +2,7 @@ package tech.ada.exception;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
+import jakarta.ws.rs.NotSupportedException;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;
@@ -35,6 +36,15 @@ public class GlobalExceptionMapper implements ExceptionMapper<Exception> {
             return Response.status(Response.Status.NOT_FOUND)
                     .entity(Map.of(
                             "error", "Resource not found"
+                    ))
+                    .build();
+        }
+
+        if(e instanceof NotSupportedException) {
+            return Response.status(Response.Status.UNSUPPORTED_MEDIA_TYPE)
+                    .entity(Map.of(
+                            "error", "Unsupported Media Type",
+                            "message", "Content-Type must be application/json"
                     ))
                     .build();
         }
