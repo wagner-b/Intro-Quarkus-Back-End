@@ -7,8 +7,10 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import tech.ada.dto.CourseRequestDTO;
 import tech.ada.dto.CourseResponseDTO;
+import tech.ada.mapper.CourseMapper;
 import tech.ada.model.Course;
 import tech.ada.service.CourseService;
+import tech.ada.service.LessonService;
 
 import java.net.URI;
 import java.util.List;
@@ -17,17 +19,25 @@ import java.util.List;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class CourseResource {
+
     @Inject
     CourseService service;
+
+    @Inject
+    LessonService lessonService;
+
+    @Inject
+    CourseMapper mapper;
 
     @GET
     public Response getCourses() {
         List<Course> courses = service.getCourses();
 
-        List<CourseResponseDTO> payload = courses.stream()
-                .map((Course c) -> new CourseResponseDTO(c.getId(),
-                                                         c.getName()))
-                .toList();
+        List<CourseResponseDTO> payload = courses.stream().map(
+                        (Course c) -> mapper.CourseToDTO(c,
+                                lessonService.getLessonsByCourseId(c.getId())
+                        )
+                ).toList();
         return Response.ok(payload).build();
     }
 
@@ -36,7 +46,8 @@ public class CourseResource {
         Course course = service.createCourse(dto);
 
         URI location = URI.create("/courses/" + course.getId());
-        CourseResponseDTO payload = new CourseResponseDTO(course.getId(),course.getName());
+        CourseResponseDTO payload = new CourseResponseDTO(course.getId(),
+                course.getName(), List.of());
 
         return Response.created(location)
                 .header("Content-Type", "application/json")
@@ -48,7 +59,9 @@ public class CourseResource {
     @Path("/{id}")
     public Response getCourseById(@PathParam("id") Long id) {
         Course course = service.getCourseById(id);
-        CourseResponseDTO payload = new CourseResponseDTO(id, course.getName());
+        CourseResponseDTO payload = mapper.CourseToDTO(course,
+                lessonService.getLessonsByCourseId(course.getId())
+                );
         return Response.ok(payload).build();
     }
 
@@ -57,7 +70,9 @@ public class CourseResource {
     public Response updateCourse(@PathParam("id") Long id,
                                  @Valid CourseRequestDTO dto) {
         Course course = service.updateCourse(id, dto);
-        CourseResponseDTO payload = new CourseResponseDTO(id, course.getName());
+        CourseResponseDTO payload = mapper.CourseToDTO(course,
+                lessonService.getLessonsByCourseId(course.getId())
+                );
         return Response.ok(payload).build();
     }
 
