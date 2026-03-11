@@ -5,9 +5,12 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import tech.ada.dto.CourseResponseDTO;
+import tech.ada.dto.CreateLessonRequestDTO;
+import tech.ada.dto.LessonResponseDTO;
 import tech.ada.model.Lesson;
 import tech.ada.service.LessonService;
 
+import java.net.URI;
 import java.util.List;
 
 @Path("/courses")
@@ -29,4 +32,22 @@ public class LessonResource {
                 .toList();
         return Response.ok().build();
     }
+
+    @POST
+    @Path("/{courseId}/lessons")
+    public Response createLesson(
+            @PathParam("courseId") Long courseId,
+            CreateLessonRequestDTO dto
+    ) {
+        Lesson lesson = service.createLesson(courseId, dto);
+        LessonResponseDTO payload = new LessonResponseDTO(
+                lesson.getId(), lesson.getName()
+        );
+        URI location = URI.create("/courses/" + courseId + "/lessons");
+        return Response.created(location)
+                .header("Content-Type", "application/json")
+                .entity(payload)
+                .build();
+    }
+
 }
