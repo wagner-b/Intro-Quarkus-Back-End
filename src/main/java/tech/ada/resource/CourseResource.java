@@ -1,6 +1,7 @@
 package tech.ada.resource;
 
 import jakarta.inject.Inject;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -31,7 +32,7 @@ public class CourseResource {
     }
 
     @POST
-    public Response createCourse(CourseRequestDTO dto) {
+    public Response createCourse(@Valid CourseRequestDTO dto) {
         Course course = service.createCourse(dto);
 
         URI location = URI.create("/courses/" + course.getId());
@@ -54,7 +55,7 @@ public class CourseResource {
     @PUT
     @Path("/{id}")
     public Response updateCourse(@PathParam("id") Long id,
-                                 CourseRequestDTO dto) {
+                                 @Valid CourseRequestDTO dto) {
         Course course = service.updateCourse(id, dto);
         CourseResponseDTO payload = new CourseResponseDTO(id, course.getName());
         return Response.ok(payload).build();
@@ -63,7 +64,7 @@ public class CourseResource {
     @DELETE
     @Path("/{id}")
     public Response deleteCourse(@PathParam("id") Long id,
-                                 CourseRequestDTO dto) {
+                                 @Valid CourseRequestDTO dto) {
         service.deleteCourse(id, dto);
         return Response.noContent().build();
     }

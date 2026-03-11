@@ -2,6 +2,7 @@ package tech.ada.model;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -19,6 +20,7 @@ public class Course extends PanacheEntity {
     @Size(min = 3, message = "Name must have at least 3 characters")
     private String name;
 
+    @Valid
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "course_id")
     private final List<Lesson> lessons = new ArrayList<>();

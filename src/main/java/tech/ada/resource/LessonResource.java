@@ -1,6 +1,7 @@
 package tech.ada.resource;
 
 import jakarta.inject.Inject;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -37,7 +38,7 @@ public class LessonResource {
     @Path("/{courseId}/lessons")
     public Response createLesson(
             @PathParam("courseId") Long courseId,
-            CreateLessonRequestDTO dto
+            @Valid CreateLessonRequestDTO dto
     ) {
         Lesson lesson = service.createLesson(courseId, dto);
         LessonResponseDTO payload = new LessonResponseDTO(
